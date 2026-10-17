@@ -1,4 +1,4 @@
-import { PDFDocument } from 'pdf-lib'
+import { PDFDocument, degrees } from 'pdf-lib'
 
 /** 1024 → "1 KB" */
 export function formatBytes(bytes) {
@@ -80,6 +80,29 @@ export function parsePageRange(text, pageCount) {
     }
   }
   return [...indices].sort((a, b) => a - b)
+}
+
+/**
+ * Susun ulang halaman + tambah rotasi.
+ * @param {ArrayBuffer|Uint8Array} buffer — PDF asli
+ * @param {Array<{ srcIndex: number, rotation: number }>} order — urutan baru; rotation = tambahan derajat (0/90/180/270)
+ */
+export async function arrangePages(buffer, order) {
+  const src = await PDFDocument.load(buffer)
+  const out = await PDFDocument.create()
+  const copied = await out.copyPages(
+    src,
+    order.map((o) => o.srcIndex),
+  )
+  copied.forEach((page, i) => {
+    const extra = order[i].rotation ?? 0
+    if (extra) {
+      const angle = (((page.getRotation().angle + extra) % 360) + 360) % 360
+      page.setRotation(degrees(angle))
+    }
+    out.addPage(page)
+  })
+  return out.save()
 }
 
 /** Download blob sebagai file di browser. */

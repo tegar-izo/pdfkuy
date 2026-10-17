@@ -3,6 +3,7 @@ import HomePage from '../pages/HomePage.vue'
 import ToolPage from '../pages/ToolPage.vue'
 import MergePage from '../pages/MergePage.vue'
 import SplitPage from '../pages/SplitPage.vue'
+import ArrangePage from '../pages/ArrangePage.vue'
 
 // Daftar tool v1 — dipakai router sekaligus kartu di landing page.
 // tiap entry: path, nama unik, judul, tagline, emoji, milestone.
@@ -34,6 +35,8 @@ export const tools = [
     tagline: 'Puter, geser, urutin ulang halaman pakai drag atau tombol panah.',
     emoji: '🔄',
     milestone: 4,
+    ready: true,
+    component: ArrangePage,
   },
   {
     path: '/gambar-ke-pdf',
