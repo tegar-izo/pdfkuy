@@ -7,6 +7,7 @@ import ArrangePage from '../pages/ArrangePage.vue'
 import ImageToPdfPage from '../pages/ImageToPdfPage.vue'
 import PageNumberPage from '../pages/PageNumberPage.vue'
 import WatermarkPage from '../pages/WatermarkPage.vue'
+import CompressPage from '../pages/CompressPage.vue'
 
 // Daftar tool v1 — dipakai router sekaligus kartu di landing page.
 // tiap entry: path, nama unik, judul, tagline, emoji, milestone.
@@ -78,6 +79,8 @@ export const tools = [
     tagline: 'Kecilin ukuran file biar muat limit upload kampus.',
     emoji: '🗜️',
     milestone: 8,
+    ready: true,
+    component: CompressPage,
   },
 ]
 
