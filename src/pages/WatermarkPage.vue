@@ -57,7 +57,10 @@ onMounted(() => {
   resizeObs = new ResizeObserver(ukurBox)
   if (boxEl.value) resizeObs.observe(boxEl.value)
 })
-onBeforeUnmount(() => resizeObs?.disconnect())
+onBeforeUnmount(() => {
+  resizeObs?.disconnect()
+  renderToken++ // hentikan render preview yang masih jalan
+})
 
 async function onFile(files) {
   resetSemua(false)

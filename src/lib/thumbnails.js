@@ -11,7 +11,8 @@ import { pdfjsLib } from './pdfjs-setup'
  */
 export async function renderThumbnails(buffer, { width = 280, onPage, isCancelled, only } = {}) {
   // pdf.js me-transfer (men-detach) ArrayBuffer yang dikasih ke `data` — makanya di-copy
-  const doc = await pdfjsLib.getDocument({ data: buffer.slice(0) }).promise
+  const loadingTask = pdfjsLib.getDocument({ data: buffer.slice(0) })
+  const doc = await loadingTask.promise
   try {
     const targets = only ?? Array.from({ length: doc.numPages }, (_, i) => i)
     for (const i0 of targets) {
@@ -30,6 +31,12 @@ export async function renderThumbnails(buffer, { width = 280, onPage, isCancelle
       page.cleanup()
     }
   } finally {
-    await doc.destroy()
+    // di pdfjs v6, destroy() ada di loadingTask, bukan di PDFDocumentProxy.
+    // aman buat shared workerPort: PDFWorker.#webWorker null → port nggak ikut terminate.
+    try {
+      await loadingTask.destroy()
+    } catch {
+      /* gagal destroy nggak boleh nutupin error asli */
+    }
   }
 }

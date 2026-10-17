@@ -15,7 +15,8 @@ import { PDFDocument } from 'pdf-lib'
  * @returns {Promise<Uint8Array|null>} null kalau dibatalkan
  */
 export async function compressPdf(buffer, { dpi = 110, quality = 0.7, onPage, isCancelled } = {}) {
-  const doc = await pdfjsLib.getDocument({ data: buffer.slice(0) }).promise
+  const loadingTask = pdfjsLib.getDocument({ data: buffer.slice(0) })
+  const doc = await loadingTask.promise
   try {
     const out = await PDFDocument.create()
     const total = doc.numPages
@@ -50,6 +51,11 @@ export async function compressPdf(buffer, { dpi = 110, quality = 0.7, onPage, is
     }
     return await out.save()
   } finally {
-    await doc.destroy()
+    // destroy() di pdfjs v6 ada di loadingTask, bukan di PDFDocumentProxy
+    try {
+      await loadingTask.destroy()
+    } catch {
+      /* jangan nutupin error asli */
+    }
   }
 }

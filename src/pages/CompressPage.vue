@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import UploadZone from '../components/UploadZone.vue'
 import { formatBytes, loadPdfMeta, downloadBlob } from '../lib/pdf'
 import { compressPdf } from '../lib/compress'
@@ -42,6 +42,10 @@ const LEVELS = [
 ]
 
 let token = 0
+
+onBeforeUnmount(() => {
+  token++ // hentikan kompresi yang masih jalan
+})
 
 const chosen = computed(() => LEVELS.find((l) => l.value === level.value))
 const canCompress = computed(() => doc.value && !busy.value)

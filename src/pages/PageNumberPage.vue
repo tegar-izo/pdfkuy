@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import UploadZone from '../components/UploadZone.vue'
 import { formatBytes, loadPdfMeta, stampPageNumbers, downloadBlob } from '../lib/pdf'
 import { renderThumbnails } from '../lib/thumbnails'
@@ -35,6 +35,10 @@ const SIZES = [
 ]
 
 let renderToken = 0
+
+onBeforeUnmount(() => {
+  renderToken++
+})
 
 async function onFile(files) {
   resetSemua(false)

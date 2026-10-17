@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import UploadZone from '../components/UploadZone.vue'
 import { formatBytes, loadPdfMeta, arrangePages, downloadBlob } from '../lib/pdf'
@@ -15,6 +15,11 @@ const result = ref(null)
 
 let nextId = 1
 let renderToken = 0
+
+// pindah halaman → hentikan render thumbnail yang masih jalan
+onBeforeUnmount(() => {
+  renderToken++
+})
 
 const rotations = computed(() => pages.value.map((p) => p.rotation).filter((r) => r !== 0))
 
