@@ -1,5 +1,16 @@
 <script setup>
 import { tools } from '../router'
+
+// gambar-ke-pdf ditandai `featured` di router — jadi kartu hero yang memenuhi
+// 2 kolom x 2 row, tools lain ngalir di sisanya
+const hero = tools.find((t) => t.featured)
+const lainnya = tools.filter((t) => !t.featured)
+
+const keunggulan = [
+  'Bisa langsung dari kamera atau galeri',
+  'Urutan gambar bebas diatur',
+  'Mode A4 atau nge-fit ukuran gambar',
+]
 </script>
 
 <template>
@@ -15,12 +26,50 @@ import { tools } from '../router'
 
   <section>
     <h2 class="mb-4 text-xl font-extrabold">Mau ngapain nih?</h2>
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="grid gap-4 sm:auto-rows-fr sm:grid-cols-2 lg:grid-cols-3">
+      <!-- kartu hero: 2 kolom x 2 row, nemenin 2 row tools lain -->
       <RouterLink
-        v-for="tool in tools"
+        v-if="hero"
+        :to="hero.path"
+        class="group relative flex flex-col justify-between gap-5 overflow-hidden rounded-2xl border-2 border-ink bg-brand p-6 text-white shadow-chunky transition-transform hover:-translate-y-1 hover:shadow-chunky sm:col-span-2 lg:col-span-2 lg:row-span-2"
+      >
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <span
+              class="inline-block rounded-full border-2 border-ink bg-accent px-3 py-0.5 text-xs font-extrabold uppercase tracking-wide text-ink"
+            >
+              <MIcon name="star" /> Fitur unggulan
+            </span>
+            <h3 class="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl">
+              {{ hero.title }}
+            </h3>
+            <p class="mt-2 max-w-md text-base opacity-90">{{ hero.tagline }}</p>
+          </div>
+          <span
+            class="text-6xl text-accent transition-transform group-hover:-translate-y-1 group-hover:rotate-6 sm:text-7xl"
+          >
+            <MIcon :name="hero.icon" />
+          </span>
+        </div>
+
+        <ul class="grid gap-1.5 text-sm font-bold sm:grid-cols-2">
+          <li v-for="poin in keunggulan" :key="poin">
+            <MIcon name="check_circle" class="text-accent" /> {{ poin }}
+          </li>
+        </ul>
+
+        <span
+          class="inline-flex w-fit items-center gap-1 rounded-xl border-2 border-ink bg-accent px-4 py-2 text-sm font-extrabold text-ink shadow-chunky-sm transition-transform group-hover:-translate-y-0.5"
+        >
+          Coba sekarang <MIcon name="arrow_forward" />
+        </span>
+      </RouterLink>
+
+      <RouterLink
+        v-for="tool in lainnya"
         :key="tool.name"
         :to="tool.path"
-        class="group flex flex-col gap-2 rounded-2xl border-2 border-ink bg-white p-5 transition-transform hover:-translate-y-1 hover:shadow-chunky dark:border-paper dark:bg-ink"
+        class="group flex h-full flex-col gap-2 rounded-2xl border-2 border-ink bg-white p-5 transition-transform hover:-translate-y-1 hover:shadow-chunky dark:border-paper dark:bg-ink"
       >
         <span class="text-4xl"><MIcon :name="tool.icon" /></span>
         <h3 class="text-lg font-extrabold group-hover:text-brand dark:group-hover:text-brand-light">

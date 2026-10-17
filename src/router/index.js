@@ -42,6 +42,8 @@ export const tools = [
     title: 'Gambar ke PDF',
     tagline: 'Tumpukan foto atau scan tugas jadi PDF rapi.',
     icon: 'add_photo_alternate',
+    // ditonjolin di landing: kartunya memenuhi 2 kolom x 2 row di grid tools
+    featured: true,
     milestone: 5,
     ready: true,
     component: () => import('../pages/ImageToPdfPage.vue'),

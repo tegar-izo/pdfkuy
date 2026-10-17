@@ -1,5 +1,6 @@
 <script setup>
 import DarkModeToggle from './components/DarkModeToggle.vue'
+import PwaUpdateBanner from './components/PwaUpdateBanner.vue'
 </script>
 
 <template>
@@ -52,5 +53,7 @@ import DarkModeToggle from './components/DarkModeToggle.vue'
         <p class="opacity-70">dibikin santuy buat anak teknik</p>
       </div>
     </footer>
+
+    <PwaUpdateBanner />
   </div>
 </template>

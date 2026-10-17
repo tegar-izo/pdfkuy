@@ -21,8 +21,14 @@ Kumpul tugas itu urusan PDF terus: gabung ini, split itu, kompres biar muat limi
 | 6 | 🔢 Nomor Halaman otomatis | ✅ |
 | 7 | 💧 Watermark nama/NIM | ✅ |
 | 8 | 🗜️ Kompres PDF | ✅ |
+| 9 | 📲 PWA — bisa dibuka offline + deteksi update | ✅ |
 
 Rencana v2: PDF → gambar, gabung banyak gambar jadi satu PDF, dan lain-lain (santuy dulu).
+
+**Offline & update:** begitu pernah dibuka sekali, semua aset (termasuk pdf.js & worker-nya) udah
+ke-precache lewat service worker — jadi app-nya tetap jalan tanpa internet. Versi baru ke-detek
+otomatis (tiap jam & tiap tab balik ke depan) dan lewat tombol **"Cek update sekarang"** di halaman
+About; kalau ada versi baru muncul banner/tombol "Muat versi baru".
 
 ## Tech stack
 
@@ -31,6 +37,7 @@ Rencana v2: PDF → gambar, gabung banyak gambar jadi satu PDF, dan lain-lain (s
 - **pdf-lib** — manipulasi PDF (merge, split, susun, nomor, watermark)
 - **pdfjs-dist** — thumbnail preview & kompres (web worker, nggak nge-freeze UI)
 - **vue-draggable-plus** — drag & drop halaman
+- **vite-plugin-pwa + Workbox** — service worker, precache, manifest PWA (mode offline)
 - **GitHub Actions → GitHub Pages** — deploy otomatis pas push ke `main`
 
 Struktur kode:
@@ -44,7 +51,8 @@ src/
 │   ├── thumbnails.js   # render thumbnail pdf.js
 │   └── pdfjs-setup.js  # konfigurasi web worker
 ├── pages/        # satu halaman per tool
-├── components/   # UploadZone (drag&drop), DarkModeToggle
+├── composables/  # useDarkMode, usePwaUpdate (register SW + deteksi update)
+├── components/   # UploadZone (drag&drop), DarkModeToggle, PwaUpdateBanner
 └── router/       # daftar tools = sumber kebenaran (route + kartu landing)
 ```
 
