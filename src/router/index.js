@@ -6,6 +6,7 @@ import SplitPage from '../pages/SplitPage.vue'
 import ArrangePage from '../pages/ArrangePage.vue'
 import ImageToPdfPage from '../pages/ImageToPdfPage.vue'
 import PageNumberPage from '../pages/PageNumberPage.vue'
+import WatermarkPage from '../pages/WatermarkPage.vue'
 
 // Daftar tool v1 — dipakai router sekaligus kartu di landing page.
 // tiap entry: path, nama unik, judul, tagline, emoji, milestone.
@@ -67,6 +68,8 @@ export const tools = [
     tagline: 'Cas nama/NIM di tiap halaman, tugas jadi lebih aman.',
     emoji: '💧',
     milestone: 7,
+    ready: true,
+    component: WatermarkPage,
   },
   {
     path: '/kompres',

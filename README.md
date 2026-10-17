@@ -17,7 +17,7 @@ Kumpul tugas itu urusan PDF terus: gabung ini, split itu, kompres biar muat limi
 | 4 | 🔄 Susun Halaman (rotate + drag & drop) | ✅ |
 | 5 | 🖼️ Gambar ke PDF | ✅ |
 | 6 | 🔢 Nomor Halaman otomatis | ✅ |
-| 7 | 💧 Watermark nama/NIM | ⏳ |
+| 7 | 💧 Watermark nama/NIM | ✅ |
 | 8 | 🗜️ Kompres PDF | ⏳ |
 
 Rencana v2: PDF → gambar, gabung banyak gambar jadi satu PDF, dan lain-lain (santuy dulu).

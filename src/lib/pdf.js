@@ -231,6 +231,83 @@ export async function stampPageNumbers(buffer, opts = {}) {
   return doc.save()
 }
 
+/**
+ * Sanitasi teks watermark: huruf di luar WinAnsi (emoji, dll.) diganti '?' —
+ * font standar PDF nggak bisa rendernya dan pdf-lib bakal error.
+ */
+export function sanitizeWatermarkText(text) {
+  return text.replace(/[^\x20-\x7E\xA0-\xFF]/g, '?')
+}
+
+/**
+ * Tempel watermark teks ke semua halaman.
+ * @param {ArrayBuffer|Uint8Array} buffer
+ * @param {object} [opts]
+ * @param {string} [opts.text]
+ * @param {number} [opts.opacity] — 0..1
+ * @param {number} [opts.rotation] — derajat CCW (45 = diagonal ke atas)
+ * @param {'center'|'tile'} [opts.mode] — 'center' satu gede di tengah, 'tile' berulang nutup halaman
+ * @param {'black'|'white'} [opts.color]
+ */
+export async function stampWatermark(buffer, opts = {}) {
+  const {
+    text = 'RAHASIA',
+    opacity = 0.25,
+    rotation = 45,
+    mode = 'center',
+    color = 'black',
+  } = opts
+
+  const clean = sanitizeWatermarkText(text).trim()
+  if (!clean) return PDFDocument.load(buffer).then((d) => d.save())
+
+  const doc = await PDFDocument.load(buffer)
+  const font = await doc.embedFont(StandardFonts.HelveticaBold)
+  const ink = color === 'white' ? rgb(1, 1, 1) : rgb(0, 0, 0)
+  const rad = (rotation * Math.PI) / 180
+  const cos = Math.cos(rad)
+  const sin = Math.sin(rad)
+  // rotasi CCW: R(a,b) = (a·cos − b·sin, a·sin + b·cos)
+  const rot = (a, b) => [a * cos - b * sin, a * sin + b * cos]
+
+  const probe = font.widthOfTextAtSize(clean, 100) / 100 // lebar per pt
+
+  for (const page of doc.getPages()) {
+    const pw = page.getWidth()
+    const ph = page.getHeight()
+
+    if (mode === 'tile') {
+      const size = Math.max(14, Math.min(pw, ph) / 20)
+      const tw = probe * size
+      const stepX = tw * 0.7 + 40
+      const stepY = size * 3.2
+      // mulai sedikit di luar tepi — cukup buat nutup halaman walau teksnya dirotasi
+      for (let y = -stepY; y <= ph + stepY; y += stepY) {
+        for (let x = -tw; x <= pw + tw; x += stepX) {
+          page.drawText(clean, { x, y, size, font, color: ink, opacity, rotate: degrees(rotation) })
+        }
+      }
+      continue
+    }
+
+    // mode center: ukuran auto biar pas ±80% lebar halaman
+    const size = Math.min((pw * 0.8) / probe, 150)
+    const tw = probe * size
+    const [dx, dy] = rot(tw / 2, size * 0.36) // pusat teks (baseline) → sudut awal
+    page.drawText(clean, {
+      x: pw / 2 - dx,
+      y: ph / 2 - dy,
+      size,
+      font,
+      color: ink,
+      opacity,
+      rotate: degrees(rotation),
+    })
+  }
+
+  return doc.save()
+}
+
 /** Download blob sebagai file di browser. */
 export function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob)
