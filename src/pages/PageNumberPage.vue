@@ -20,12 +20,12 @@ const start = ref(1)
 const skipFirst = ref(false)
 
 const POSITIONS = [
-  { value: 'top-left', label: '↖ Atas kiri' },
-  { value: 'top-center', label: '↑ Atas tengah' },
-  { value: 'top-right', label: '↗ Atas kanan' },
-  { value: 'bottom-left', label: '↙ Bawah kiri' },
-  { value: 'bottom-center', label: '↓ Bawah tengah' },
-  { value: 'bottom-right', label: '↘ Bawah kanan' },
+  { value: 'top-left', icon: 'north_west', label: 'Atas kiri' },
+  { value: 'top-center', icon: 'north', label: 'Atas tengah' },
+  { value: 'top-right', icon: 'north_east', label: 'Atas kanan' },
+  { value: 'bottom-left', icon: 'south_west', label: 'Bawah kiri' },
+  { value: 'bottom-center', icon: 'south', label: 'Bawah tengah' },
+  { value: 'bottom-right', icon: 'south_east', label: 'Bawah kanan' },
 ]
 
 const SIZES = [
@@ -45,7 +45,7 @@ async function onFile(files) {
   const file = files[0]
   const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
   if (!isPdf) {
-    error.value = 'Itu bukan PDF 😅'
+    error.value = 'Itu bukan PDF'
     return
   }
   try {
@@ -60,10 +60,10 @@ async function onFile(files) {
         if (token === renderToken) thumb.value = dataUrl
       },
     }).catch(() => {
-      if (token === renderToken) error.value = 'Preview gagal dirender 😢 (nomor tetap bisa ditempel).'
+      if (token === renderToken) error.value = 'Preview gagal dirender (nomor tetap bisa ditempel).'
     })
   } catch {
-    error.value = 'File gagal dibaca — kemungkinan rusak atau kena password 🔒'
+    error.value = 'File gagal dibaca — kemungkinan rusak atau kena password'
   }
 }
 
@@ -140,10 +140,10 @@ function download() {
 
 <template>
   <section class="py-6">
-    <h1 class="text-3xl font-extrabold tracking-tight">🔢 Nomor Halaman</h1>
+    <h1 class="text-3xl font-extrabold tracking-tight"><MIcon name="format_list_numbered" /> Nomor Halaman</h1>
     <p class="mt-2 opacity-80">
       Tempelin nomor halaman otomatis di semua halaman — biar dosenmu nggak bilang "halamannya di
-      mana?!". 🔒
+      mana?!".
     </p>
 
     <div class="mt-6" v-if="!doc">
@@ -154,7 +154,7 @@ function download() {
         v-if="error"
         class="mt-4 rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
       >
-        ⚠️ {{ error }}
+        <MIcon name="warning" /> {{ error }}
       </p>
     </div>
 
@@ -165,7 +165,7 @@ function download() {
           class="flex flex-wrap items-center justify-between gap-2 rounded-xl border-2 border-ink bg-white p-3 dark:border-paper dark:bg-ink"
         >
           <p class="font-bold">
-            📄 {{ doc.name }}
+            <MIcon name="picture_as_pdf" /> {{ doc.name }}
             <span class="text-sm font-normal opacity-70">
               · {{ doc.pageCount }} halaman · {{ formatBytes(doc.size) }}
             </span>
@@ -180,20 +180,21 @@ function download() {
         </div>
 
         <fieldset>
-          <legend class="font-extrabold">Posisi nomornya di mana? 👇</legend>
+          <legend class="font-extrabold">Posisi nomornya di mana?</legend>
           <div class="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
             <button
               v-for="p in POSITIONS"
               :key="p.value"
               type="button"
               @click="position = p.value; result = null"
-              class="cursor-pointer rounded-lg border-2 px-2 py-2 text-sm font-bold transition-transform hover:-translate-y-0.5"
+              class="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border-2 px-2 py-2 text-sm font-bold transition-transform hover:-translate-y-0.5"
               :class="
                 position === p.value
                   ? 'border-ink bg-accent text-ink'
                   : 'border-ink dark:border-paper'
               "
             >
+              <MIcon :name="p.icon" />
               {{ p.label }}
             </button>
           </div>
@@ -241,15 +242,27 @@ function download() {
             <div class="mt-1 flex gap-1">
               <button
                 v-for="c in [
-                  { value: 'black', label: '⬛ Hitam' },
-                  { value: 'white', label: '⬜ Putih' },
+                  { value: 'black', label: 'Hitam', hex: '#000000' },
+                  { value: 'white', label: 'Putih', hex: '#ffffff' },
                 ]"
                 :key="c.value"
                 type="button"
                 @click="color = c.value; result = null"
-                class="cursor-pointer rounded-lg border-2 border-ink px-3 py-1 text-sm font-bold dark:border-paper"
+                class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border-2 border-ink px-3 py-1 text-sm font-bold dark:border-paper"
                 :class="color === c.value ? 'bg-accent text-ink' : ''"
               >
+                <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" aria-hidden="true">
+                  <rect
+                    x="1"
+                    y="1"
+                    width="14"
+                    height="14"
+                    rx="3.5"
+                    :fill="c.hex"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  />
+                </svg>
                 {{ c.label }}
               </button>
             </div>
@@ -278,7 +291,7 @@ function download() {
         </div>
 
         <p v-if="allSkipped" class="text-sm font-bold text-red-500">
-          PDF-nya cuma 1 halaman, kalo dilewati ya nggak ada nomornya 😅
+          PDF-nya cuma 1 halaman, kalo dilewati ya nggak ada nomornya
         </p>
 
         <button
@@ -287,21 +300,21 @@ function download() {
           :disabled="!canStamp"
           class="w-full cursor-pointer rounded-xl border-2 border-ink bg-accent px-6 py-3 text-lg font-extrabold text-ink transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 dark:border-paper sm:w-auto"
         >
-          {{ busy ? 'Lagi nempel nomor... 🔢' : 'Tempel nomornya! 🔥' }}
+          {{ busy ? 'Lagi nempel nomor...' : 'Tempel nomornya!' }}
         </button>
 
         <p
           v-if="error"
           class="rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
         >
-          ⚠️ {{ error }}
+          <MIcon name="warning" /> {{ error }}
         </p>
 
         <div
           v-if="result"
           class="rounded-2xl border-2 border-ink bg-accent p-5 text-ink dark:border-paper"
         >
-          <h2 class="text-lg font-extrabold">✅ Beres!</h2>
+          <h2 class="text-lg font-extrabold"><MIcon name="check_circle" /> Beres!</h2>
           <p class="mt-1 text-sm">
             {{ result.name }} · {{ result.terpasang }} nomor terpasang ·
             {{ formatBytes(result.size) }}
@@ -311,7 +324,7 @@ function download() {
             @click="download"
             class="mt-4 cursor-pointer rounded-xl border-2 border-ink bg-white px-6 py-3 font-extrabold transition-transform hover:-translate-y-0.5 dark:border-paper dark:bg-ink dark:text-paper"
           >
-            ⬇️ Download
+            <MIcon name="download" /> Download
           </button>
         </div>
       </div>
@@ -324,7 +337,7 @@ function download() {
         >
           <img v-if="thumb" :src="thumb" alt="Preview halaman 1" class="h-full w-full object-contain" />
           <span v-else class="absolute inset-0 flex items-center justify-center text-3xl opacity-40">
-            ⏳
+            <MIcon name="hourglass_top" />
           </span>
           <span
             v-if="!skipFirst || doc.pageCount > 1"

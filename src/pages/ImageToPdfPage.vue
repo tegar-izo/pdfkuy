@@ -20,7 +20,7 @@ async function addFiles(incoming) {
   result.value = null
   for (const file of incoming) {
     if (!isImageFile(file)) {
-      errors.value.push(`${file.name} bukan gambar 😅`)
+      errors.value.push(`${file.name} bukan gambar`)
       continue
     }
     try {
@@ -37,7 +37,7 @@ async function addFiles(incoming) {
         previewUrl: URL.createObjectURL(file),
       })
     } catch {
-      errors.value.push(`${file.name} gagal dibuka — formatnya nggak kebaca di browser 😢`)
+      errors.value.push(`${file.name} gagal dibuka — formatnya nggak kebaca di browser`)
     }
   }
 }
@@ -101,10 +101,10 @@ function download() {
 
 <template>
   <section class="py-6">
-    <h1 class="text-3xl font-extrabold tracking-tight">🖼️ Gambar ke PDF</h1>
+    <h1 class="text-3xl font-extrabold tracking-tight"><MIcon name="add_photo_alternate" /> Gambar ke PDF</h1>
     <p class="mt-2 opacity-80">
       Tumpukan foto atau hasil scan tugas → satu PDF rapi, urutannya kamu yang atur. JPG, PNG,
-      WebP, semua bisa. 🔒
+      WebP, semua bisa.
     </p>
 
     <div class="mt-6">
@@ -119,7 +119,7 @@ function download() {
         :key="i"
         class="rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
       >
-        ⚠️ {{ msg }}
+        <MIcon name="warning" /> {{ msg }}
       </li>
     </ul>
 
@@ -138,7 +138,7 @@ function download() {
       </div>
 
       <p class="mt-4 text-sm font-bold opacity-70">
-        Seret kartu atau pakai ← → buat ngatur urutan.
+        Seret kartu atau pakai <MIcon name="arrow_back" /> <MIcon name="arrow_forward" /> buat ngatur urutan.
       </p>
 
       <VueDraggable
@@ -181,7 +181,7 @@ function download() {
               aria-label="Geser ke kiri"
               class="cursor-pointer rounded-md border-2 border-ink px-1.5 py-0.5 text-xs font-bold disabled:cursor-not-allowed disabled:opacity-30 dark:border-paper"
             >
-              ←
+              <MIcon name="arrow_back" />
             </button>
             <button
               type="button"
@@ -190,7 +190,7 @@ function download() {
               aria-label="Geser ke kanan"
               class="cursor-pointer rounded-md border-2 border-ink px-1.5 py-0.5 text-xs font-bold disabled:cursor-not-allowed disabled:opacity-30 dark:border-paper"
             >
-              →
+              <MIcon name="arrow_forward" />
             </button>
             <button
               type="button"
@@ -198,7 +198,7 @@ function download() {
               aria-label="Hapus gambar"
               class="cursor-pointer rounded-md border-2 border-ink px-1.5 py-0.5 text-xs font-bold hover:bg-red-500 hover:text-white dark:border-paper"
             >
-              ✕
+              <MIcon name="close" />
             </button>
           </div>
         </div>
@@ -206,7 +206,7 @@ function download() {
 
       <!-- ukuran halaman -->
       <fieldset class="mt-6">
-        <legend class="font-extrabold">Ukuran halaman 👇</legend>
+        <legend class="font-extrabold">Ukuran halaman</legend>
         <div class="mt-2 grid gap-3 sm:grid-cols-2">
           <label
             class="flex cursor-pointer items-start gap-3 rounded-xl border-2 p-4"
@@ -245,14 +245,14 @@ function download() {
         :disabled="!canBuild"
         class="mt-6 w-full cursor-pointer rounded-xl border-2 border-ink bg-accent px-6 py-3 text-lg font-extrabold text-ink transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 dark:border-paper sm:w-auto"
       >
-        {{ busy ? 'Lagi nyatuin gambar... 🖼️' : 'Jadiin PDF! 🔥' }}
+        {{ busy ? 'Lagi nyatuin gambar...' : 'Jadiin PDF!' }}
       </button>
 
       <div
         v-if="result"
         class="mt-6 rounded-2xl border-2 border-ink bg-accent p-5 text-ink dark:border-paper"
       >
-        <h2 class="text-lg font-extrabold">✅ Beres! PDF-nya jadi.</h2>
+        <h2 class="text-lg font-extrabold"><MIcon name="check_circle" /> Beres! PDF-nya jadi.</h2>
         <p class="mt-1 text-sm">
           {{ result.name }} · {{ result.pages }} halaman · {{ formatBytes(result.size) }}
         </p>
@@ -261,7 +261,7 @@ function download() {
           @click="download"
           class="mt-4 cursor-pointer rounded-xl border-2 border-ink bg-white px-6 py-3 font-extrabold transition-transform hover:-translate-y-0.5 dark:border-paper dark:bg-ink dark:text-paper"
         >
-          ⬇️ Download
+          <MIcon name="download" /> Download
         </button>
       </div>
     </template>

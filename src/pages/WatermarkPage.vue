@@ -67,7 +67,7 @@ async function onFile(files) {
   const file = files[0]
   const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
   if (!isPdf) {
-    error.value = 'Itu bukan PDF 😅'
+    error.value = 'Itu bukan PDF'
     return
   }
   try {
@@ -82,10 +82,10 @@ async function onFile(files) {
         if (token === renderToken) thumb.value = dataUrl
       },
     }).catch(() => {
-      if (token === renderToken) error.value = 'Preview gagal dirender 😢 (watermark tetap bisa ditempel).'
+      if (token === renderToken) error.value = 'Preview gagal dirender (watermark tetap bisa ditempel).'
     })
   } catch {
-    error.value = 'File gagal dibaca — kemungkinan rusak atau kena password 🔒'
+    error.value = 'File gagal dibaca — kemungkinan rusak atau kena password'
   }
 }
 
@@ -129,9 +129,9 @@ function download() {
 
 <template>
   <section class="py-6">
-    <h1 class="text-3xl font-extrabold tracking-tight">💧 Watermark</h1>
+    <h1 class="text-3xl font-extrabold tracking-tight"><MIcon name="branding_watermark" /> Watermark</h1>
     <p class="mt-2 opacity-80">
-      Cas nama/NIM kamu di tiap halaman — biar file yang tersebar tetap ada jejaknya. 🔒
+      Cas nama/NIM kamu di tiap halaman — biar file yang tersebar tetap ada jejaknya.
     </p>
 
     <div class="mt-6" v-if="!doc">
@@ -142,7 +142,7 @@ function download() {
         v-if="error"
         class="mt-4 rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
       >
-        ⚠️ {{ error }}
+        <MIcon name="warning" /> {{ error }}
       </p>
     </div>
 
@@ -152,7 +152,7 @@ function download() {
           class="flex flex-wrap items-center justify-between gap-2 rounded-xl border-2 border-ink bg-white p-3 dark:border-paper dark:bg-ink"
         >
           <p class="font-bold">
-            📄 {{ doc.name }}
+            <MIcon name="picture_as_pdf" /> {{ doc.name }}
             <span class="text-sm font-normal opacity-70">
               · {{ doc.pageCount }} halaman · {{ formatBytes(doc.size) }}
             </span>
@@ -167,7 +167,7 @@ function download() {
         </div>
 
         <label class="block">
-          <span class="font-extrabold">Teks watermark 👇</span>
+          <span class="font-extrabold">Teks watermark</span>
           <input
             v-model="text"
             type="text"
@@ -176,7 +176,7 @@ function download() {
             class="mt-2 w-full rounded-lg border-2 border-ink bg-white px-3 py-2.5 text-lg font-bold dark:border-paper dark:bg-ink"
           />
           <span v-if="teksDiubah" class="mt-1 block text-xs font-bold text-amber-600">
-            ⚠️ Sebagian karakter nggak didukung PDF, diganti “?” ya.
+            <MIcon name="warning" /> Sebagian karakter nggak didukung PDF, diganti “?” ya.
           </span>
         </label>
 
@@ -234,15 +234,27 @@ function download() {
             <div class="mt-1 flex gap-1">
               <button
                 v-for="c in [
-                  { value: 'black', label: '⬛ Hitam' },
-                  { value: 'white', label: '⬜ Putih' },
+                  { value: 'black', label: 'Hitam', hex: '#000000' },
+                  { value: 'white', label: 'Putih', hex: '#ffffff' },
                 ]"
                 :key="c.value"
                 type="button"
                 @click="color = c.value; result = null"
-                class="cursor-pointer rounded-lg border-2 border-ink px-3 py-1 text-sm font-bold dark:border-paper"
+                class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border-2 border-ink px-3 py-1 text-sm font-bold dark:border-paper"
                 :class="color === c.value ? 'bg-accent text-ink' : ''"
               >
+                <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" aria-hidden="true">
+                  <rect
+                    x="1"
+                    y="1"
+                    width="14"
+                    height="14"
+                    rx="3.5"
+                    :fill="c.hex"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  />
+                </svg>
                 {{ c.label }}
               </button>
             </div>
@@ -250,7 +262,7 @@ function download() {
         </div>
 
         <p v-if="!adaIsi" class="text-sm font-bold text-amber-600">
-          Isi teks watermarknya dulu ya ✍️
+          Isi teks watermarknya dulu ya
         </p>
 
         <button
@@ -259,21 +271,21 @@ function download() {
           :disabled="!canStamp"
           class="w-full cursor-pointer rounded-xl border-2 border-ink bg-accent px-6 py-3 text-lg font-extrabold text-ink transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 dark:border-paper sm:w-auto"
         >
-          {{ busy ? 'Lagi nempel watermark... 💧' : 'Tempel watermark! 🔥' }}
+          {{ busy ? 'Lagi nempel watermark...' : 'Tempel watermark!' }}
         </button>
 
         <p
           v-if="error"
           class="rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
         >
-          ⚠️ {{ error }}
+          <MIcon name="warning" /> {{ error }}
         </p>
 
         <div
           v-if="result"
           class="rounded-2xl border-2 border-ink bg-accent p-5 text-ink dark:border-paper"
         >
-          <h2 class="text-lg font-extrabold">✅ Beres!</h2>
+          <h2 class="text-lg font-extrabold"><MIcon name="check_circle" /> Beres!</h2>
           <p class="mt-1 text-sm">
             {{ result.name }} · {{ result.pages }} halaman · {{ formatBytes(result.size) }}
           </p>
@@ -282,7 +294,7 @@ function download() {
             @click="download"
             class="mt-4 cursor-pointer rounded-xl border-2 border-ink bg-white px-6 py-3 font-extrabold transition-transform hover:-translate-y-0.5 dark:border-paper dark:bg-ink dark:text-paper"
           >
-            ⬇️ Download
+            <MIcon name="download" /> Download
           </button>
         </div>
       </div>
@@ -296,7 +308,7 @@ function download() {
         >
           <img v-if="thumb" :src="thumb" alt="Preview halaman 1" class="h-full w-full object-contain" />
           <span v-else class="absolute inset-0 flex items-center justify-center text-3xl opacity-40">
-            ⏳
+            <MIcon name="hourglass_top" />
           </span>
 
           <!-- overlay center -->

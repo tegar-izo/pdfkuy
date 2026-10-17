@@ -38,14 +38,14 @@ async function onFile(files) {
   const file = files[0]
   const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
   if (!isPdf) {
-    error.value = 'Itu bukan PDF 😅'
+    error.value = 'Itu bukan PDF'
     return
   }
   try {
     const { buffer, pageCount } = await loadPdfMeta(file)
     doc.value = { buffer, pageCount, name: file.name, size: file.size }
   } catch {
-    error.value = 'File gagal dibaca — kemungkinan rusak atau kena password 🔒'
+    error.value = 'File gagal dibaca — kemungkinan rusak atau kena password'
   }
 }
 
@@ -128,10 +128,10 @@ function download() {
 
 <template>
   <section class="py-6">
-    <h1 class="text-3xl font-extrabold tracking-tight">✂️ Split PDF</h1>
+    <h1 class="text-3xl font-extrabold tracking-tight"><MIcon name="content_cut" /> Split PDF</h1>
     <p class="mt-2 opacity-80">
       Mau ambil sebagian halaman aja, atau buang halaman yang nggak perlu? Pilih-pilih halaman
-      terus potong. 🔒 Semua proses lokal.
+      terus potong. Semua proses lokal.
     </p>
 
     <div class="mt-6" v-if="!doc">
@@ -142,7 +142,7 @@ function download() {
         v-if="error"
         class="mt-4 rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
       >
-        ⚠️ {{ error }}
+        <MIcon name="warning" /> {{ error }}
       </p>
     </div>
 
@@ -151,7 +151,7 @@ function download() {
         class="flex flex-wrap items-center justify-between gap-2 rounded-xl border-2 border-ink bg-white p-3 dark:border-paper dark:bg-ink"
       >
         <p class="font-bold">
-          📄 {{ doc.name }}
+          <MIcon name="picture_as_pdf" /> {{ doc.name }}
           <span class="text-sm font-normal opacity-70">
             · {{ doc.pageCount }} halaman · {{ formatBytes(doc.size) }}
           </span>
@@ -177,7 +177,7 @@ function download() {
               : 'border-ink opacity-60 dark:border-paper'
           "
         >
-          <span class="text-xl">✂️</span>
+          <span class="text-xl"><MIcon name="content_cut" /></span>
           <p class="mt-1 font-extrabold">Ambil halaman terpilih</p>
           <p class="text-sm">Halaman yang kamu pilih jadi file baru.</p>
         </button>
@@ -191,7 +191,7 @@ function download() {
               : 'border-ink opacity-60 dark:border-paper'
           "
         >
-          <span class="text-xl">🗑️</span>
+          <span class="text-xl"><MIcon name="delete" /></span>
           <p class="mt-1 font-extrabold">Buang halaman terpilih</p>
           <p class="text-sm">Halaman yang kamu pilih dibuang, sisanya jadi file baru.</p>
         </button>
@@ -235,11 +235,11 @@ function download() {
         v-if="rangeError"
         class="mt-2 rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
       >
-        ⚠️ {{ rangeError }}
+        <MIcon name="warning" /> {{ rangeError }}
       </p>
 
       <!-- grid halaman -->
-      <p class="mt-6 font-extrabold">Klik halaman buat milih 👇</p>
+      <p class="mt-6 font-extrabold">Klik halaman buat milih</p>
       <div class="mt-2 flex flex-wrap gap-2">
         <button
           v-for="i in doc.pageCount"
@@ -258,7 +258,7 @@ function download() {
         {{ selected.length }} halaman dipilih → hasilnya
         <strong>{{ keepIndices.length }} halaman</strong>
         <span v-if="mode === 'delete' && selected.length === doc.pageCount" class="text-red-500">
-          (eh, semua halamamu kebuang tuh 😅)
+          (eh, semua halamamu kebuang tuh)
         </span>
       </p>
 
@@ -268,21 +268,21 @@ function download() {
         :disabled="!canRun"
         class="mt-4 w-full cursor-pointer rounded-xl border-2 border-ink bg-accent px-6 py-3 text-lg font-extrabold text-ink transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 dark:border-paper sm:w-auto"
       >
-        {{ busy ? 'Lagi motong... ✂️' : 'Potong PDF! 🔥' }}
+        {{ busy ? 'Lagi motong...' : 'Potong PDF!' }}
       </button>
 
       <p
         v-if="error"
         class="mt-4 rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
       >
-        ⚠️ {{ error }}
+        <MIcon name="warning" /> {{ error }}
       </p>
 
       <div
         v-if="result"
         class="mt-6 rounded-2xl border-2 border-ink bg-accent p-5 text-ink dark:border-paper"
       >
-        <h2 class="text-lg font-extrabold">✅ Beres! File-nya udah kepotong.</h2>
+        <h2 class="text-lg font-extrabold"><MIcon name="check_circle" /> Beres! File-nya udah kepotong.</h2>
         <p class="mt-1 text-sm">
           {{ result.name }} · {{ result.pages }} halaman · {{ formatBytes(result.size) }}
         </p>
@@ -291,7 +291,7 @@ function download() {
           @click="download"
           class="mt-4 cursor-pointer rounded-xl border-2 border-ink bg-white px-6 py-3 font-extrabold transition-transform hover:-translate-y-0.5 dark:border-paper dark:bg-ink dark:text-paper"
         >
-          ⬇️ Download
+          <MIcon name="download" /> Download
         </button>
       </div>
     </div>

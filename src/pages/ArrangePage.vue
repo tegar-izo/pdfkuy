@@ -28,7 +28,7 @@ async function onFile(files) {
   const file = files[0]
   const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
   if (!isPdf) {
-    error.value = 'Itu bukan PDF 😅'
+    error.value = 'Itu bukan PDF'
     return
   }
   try {
@@ -42,7 +42,7 @@ async function onFile(files) {
     }))
     mulaiRender(buffer)
   } catch {
-    error.value = 'File gagal dibaca — kemungkinan rusak atau kena password 🔒'
+    error.value = 'File gagal dibaca — kemungkinan rusak atau kena password'
   }
 }
 
@@ -60,7 +60,7 @@ function mulaiRender(buffer) {
     },
   })
     .catch(() => {
-      if (token === renderToken) error.value = 'Preview gagal dirender 😢 (file-nya tetap bisa diproses kok).'
+      if (token === renderToken) error.value = 'Preview gagal dirender (file-nya tetap bisa diproses kok).'
     })
     .finally(() => {
       if (token === renderToken) loading.value = false
@@ -143,10 +143,10 @@ function rotasiStyle(rotation) {
 
 <template>
   <section class="py-6">
-    <h1 class="text-3xl font-extrabold tracking-tight">🔄 Susun Halaman</h1>
+    <h1 class="text-3xl font-extrabold tracking-tight"><MIcon name="swap_vert" /> Susun Halaman</h1>
     <p class="mt-2 opacity-80">
       Geser urutan halaman (drag atau tombol panah) dan muter halaman yang kebalik. Pratinjau
-      kecil-kecil di bawah biar nggak salah tuker. 🔒
+      kecil-kecil di bawah biar nggak salah tuker.
     </p>
 
     <div class="mt-6" v-if="!doc">
@@ -157,7 +157,7 @@ function rotasiStyle(rotation) {
         v-if="error"
         class="mt-4 rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
       >
-        ⚠️ {{ error }}
+        <MIcon name="warning" /> {{ error }}
       </p>
     </div>
 
@@ -166,7 +166,7 @@ function rotasiStyle(rotation) {
         class="flex flex-wrap items-center justify-between gap-2 rounded-xl border-2 border-ink bg-white p-3 dark:border-paper dark:bg-ink"
       >
         <p class="font-bold">
-          📄 {{ doc.name }}
+          <MIcon name="picture_as_pdf" /> {{ doc.name }}
           <span class="text-sm font-normal opacity-70">
             · {{ doc.pageCount }} halaman · {{ formatBytes(doc.size) }}
           </span>
@@ -190,12 +190,12 @@ function rotasiStyle(rotation) {
       </div>
 
       <p v-if="loading" class="mt-4 text-sm font-bold opacity-70">
-        🖼️ Lagi bikin pratinjau... {{ thumbsLoaded }}/{{ doc.pageCount }} halaman
+        Lagi bikin pratinjau... {{ thumbsLoaded }}/{{ doc.pageCount }} halaman
         <span v-if="thumbsLoaded < doc.pageCount">— santuy dulu ya, bisa langsung disusun kok</span>
       </p>
 
       <p class="mt-6 font-extrabold">
-        Seret kartu buat geser urutan, atau pakai tombol ← →. Mute pakai ↻ 👇
+        Seret kartu buat geser urutan, atau pakai tombol <MIcon name="arrow_back" /> <MIcon name="arrow_forward" />. Mute pakai <MIcon name="rotate_right" />
       </p>
 
       <VueDraggable
@@ -217,7 +217,7 @@ function rotasiStyle(rotation) {
               class="max-h-full max-w-full rounded-sm shadow-sm transition-transform"
               draggable="false"
             />
-            <span v-else class="text-2xl opacity-40">⏳</span>
+            <span v-else class="text-2xl opacity-40"><MIcon name="hourglass_top" /></span>
             <span
               class="absolute left-1 top-1 rounded-md bg-brand px-1.5 py-0.5 text-xs font-extrabold text-white"
             >
@@ -240,7 +240,7 @@ function rotasiStyle(rotation) {
                 aria-label="Geser ke kiri"
                 class="cursor-pointer rounded-md border-2 border-ink px-1.5 py-0.5 text-xs font-bold disabled:cursor-not-allowed disabled:opacity-30 dark:border-paper"
               >
-                ←
+                <MIcon name="arrow_back" />
               </button>
               <button
                 type="button"
@@ -249,7 +249,7 @@ function rotasiStyle(rotation) {
                 aria-label="Geser ke kanan"
                 class="cursor-pointer rounded-md border-2 border-ink px-1.5 py-0.5 text-xs font-bold disabled:cursor-not-allowed disabled:opacity-30 dark:border-paper"
               >
-                →
+                <MIcon name="arrow_forward" />
               </button>
               <button
                 type="button"
@@ -257,7 +257,7 @@ function rotasiStyle(rotation) {
                 aria-label="Putar 90 derajat"
                 class="cursor-pointer rounded-md border-2 border-ink px-1.5 py-0.5 text-xs font-bold hover:bg-accent hover:text-ink dark:border-paper"
               >
-                ↻
+                <MIcon name="rotate_right" />
               </button>
             </div>
           </div>
@@ -275,31 +275,31 @@ function rotasiStyle(rotation) {
         :disabled="!bisaSimpan"
         class="mt-4 w-full cursor-pointer rounded-xl border-2 border-ink bg-accent px-6 py-3 text-lg font-extrabold text-ink transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 dark:border-paper sm:w-auto"
       >
-        {{ busy ? 'Lagi nyusun... 🔄' : 'Susun jadi PDF! 🔥' }}
+        {{ busy ? 'Lagi nyusun...' : 'Susun jadi PDF!' }}
       </button>
 
       <p
         v-if="error"
         class="mt-4 rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
       >
-        ⚠️ {{ error }}
+        <MIcon name="warning" /> {{ error }}
       </p>
 
       <div
         v-if="result"
         class="mt-6 rounded-2xl border-2 border-ink bg-accent p-5 text-ink dark:border-paper"
       >
-        <h2 class="text-lg font-extrabold">✅ Beres!</h2>
+        <h2 class="text-lg font-extrabold"><MIcon name="check_circle" /> Beres!</h2>
         <p class="mt-1 text-sm">
           {{ result.name }} · {{ result.pages }} halaman · {{ formatBytes(result.size) }}
-          <template v-if="!result.diubah"> — eh, nggak ada yang berubah sama sekali tuh 😄</template>
+          <template v-if="!result.diubah"> — eh, nggak ada yang berubah sama sekali tuh</template>
         </p>
         <button
           type="button"
           @click="download"
           class="mt-4 cursor-pointer rounded-xl border-2 border-ink bg-white px-6 py-3 font-extrabold transition-transform hover:-translate-y-0.5 dark:border-paper dark:bg-ink dark:text-paper"
         >
-          ⬇️ Download
+          <MIcon name="download" /> Download
         </button>
       </div>
     </div>

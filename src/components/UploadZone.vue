@@ -46,7 +46,7 @@ function onDrop(event) {
         : 'border-ink hover:border-brand dark:border-paper'
     "
   >
-    <p class="text-3xl">📄</p>
+    <p class="text-3xl"><MIcon name="upload_file" /></p>
     <p class="mt-2 font-extrabold">{{ props.hint }}</p>
     <p class="mt-1 text-sm opacity-70">
       <slot name="sub" />

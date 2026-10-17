@@ -14,7 +14,7 @@ const result = ref(null) // { blob, name, size, before }
 const LEVELS = [
   {
     value: 'kecil',
-    icon: '🐭',
+    icon: 'density_small',
     label: 'Kecil banget',
     detail: '72 DPI · kualitas 50%',
     hint: 'Paling ramping. Tampilan pas-pasan.',
@@ -23,7 +23,7 @@ const LEVELS = [
   },
   {
     value: 'sedang',
-    icon: '🐞',
+    icon: 'density_medium',
     label: 'Sedang',
     detail: '110 DPI · kualitas 70%',
     hint: 'Ukuran jauh turun, tampilan masih enak. Rekomendasi.',
@@ -32,7 +32,7 @@ const LEVELS = [
   },
   {
     value: 'tinggi',
-    icon: '🦅',
+    icon: 'density_large',
     label: 'Tinggi',
     detail: '150 DPI · kualitas 85%',
     hint: 'Detail lebih terjaga, ukuran tetep lebih kecil.',
@@ -55,14 +55,14 @@ async function onFile(files) {
   const file = files[0]
   const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
   if (!isPdf) {
-    error.value = 'Itu bukan PDF 😅'
+    error.value = 'Itu bukan PDF'
     return
   }
   try {
     const { buffer, pageCount } = await loadPdfMeta(file)
     doc.value = { buffer, pageCount, name: file.name, size: file.size }
   } catch {
-    error.value = 'File gagal dibaca — kemungkinan rusak atau kena password 🔒'
+    error.value = 'File gagal dibaca — kemungkinan rusak atau kena password'
   }
 }
 
@@ -114,16 +114,16 @@ function download() {
 
 <template>
   <section class="py-6">
-    <h1 class="text-3xl font-extrabold tracking-tight">🗜️ Kompres PDF</h1>
+    <h1 class="text-3xl font-extrabold tracking-tight"><MIcon name="compress" /> Kompres PDF</h1>
     <p class="mt-2 opacity-80">
-      File kegedean buat di-upload ke Classroom/email kampus? Kecilin di sini. 🔒
+      File kegedean buat di-upload ke Classroom/email kampus? Kecilin di sini.
     </p>
 
     <!-- penjelasan jujur -->
     <div
       class="mt-4 rounded-xl border-2 border-amber-500 bg-amber-50 p-4 text-sm text-amber-900 dark:bg-amber-950 dark:text-amber-200"
     >
-      <p class="font-extrabold">⚠️ Baca dulu, biar nggak kaget:</p>
+      <p class="font-extrabold"><MIcon name="warning" /> Baca dulu, biar nggak kaget:</p>
       <p class="mt-1">
         Biar jadi kecil, tiap halaman <strong>dirender ulang jadi gambar</strong>. Artinya teks
         berubah jadi piksel — <strong>nggak bisa dicari, dicopy, atau di-zoom tetep tajam</strong>.
@@ -139,7 +139,7 @@ function download() {
         v-if="error"
         class="mt-4 rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
       >
-        ⚠️ {{ error }}
+        <MIcon name="warning" /> {{ error }}
       </p>
     </div>
 
@@ -148,7 +148,7 @@ function download() {
         class="flex flex-wrap items-center justify-between gap-2 rounded-xl border-2 border-ink bg-white p-3 dark:border-paper dark:bg-ink"
       >
         <p class="font-bold">
-          📄 {{ doc.name }}
+          <MIcon name="picture_as_pdf" /> {{ doc.name }}
           <span class="text-sm font-normal opacity-70">
             · {{ doc.pageCount }} halaman · {{ formatBytes(doc.size) }}
           </span>
@@ -163,7 +163,7 @@ function download() {
       </div>
 
       <fieldset class="mt-6">
-        <legend class="font-extrabold">Mau sekecil apa? 👇</legend>
+        <legend class="font-extrabold">Mau sekecil apa?</legend>
         <div class="mt-2 grid gap-3 sm:grid-cols-3">
           <button
             v-for="l in LEVELS"
@@ -177,7 +177,7 @@ function download() {
                 : 'border-ink dark:border-paper'
             "
           >
-            <span class="text-xl">{{ l.icon }}</span>
+            <span class="text-xl"><MIcon :name="l.icon" /></span>
             <p class="mt-1 font-extrabold">{{ l.label }}</p>
             <p class="text-xs font-bold opacity-70">{{ l.detail }}</p>
             <p class="mt-1 text-sm opacity-80">{{ l.hint }}</p>
@@ -193,8 +193,8 @@ function download() {
       >
         {{
           busy
-            ? `Lagi kompres... ${progress.done}/${progress.total} 🗜️`
-            : 'Kompres! 🔥'
+            ? `Lagi kompres... ${progress.done}/${progress.total}`
+            : 'Kompres!'
         }}
       </button>
 
@@ -202,7 +202,7 @@ function download() {
         v-if="error"
         class="mt-4 rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
       >
-        ⚠️ {{ error }}
+        <MIcon name="warning" /> {{ error }}
       </p>
 
       <div
@@ -211,7 +211,7 @@ function download() {
       >
         <template v-if="result.size < result.before">
           <h2 class="text-lg font-extrabold">
-            ✅ Beres! {{ Math.round((1 - result.size / result.before) * 100) }}% lebih kecil 🎉
+            <MIcon name="check_circle" /> Beres! {{ Math.round((1 - result.size / result.before) * 100) }}% lebih kecil
           </h2>
           <p class="mt-1 text-sm">
             {{ formatBytes(result.before) }} → {{ formatBytes(result.size) }} ·
@@ -219,7 +219,7 @@ function download() {
           </p>
         </template>
         <template v-else>
-          <h2 class="text-lg font-extrabold">😅 Waduh, malah nggak mengecil.</h2>
+          <h2 class="text-lg font-extrabold"><MIcon name="warning" /> Waduh, malah nggak mengecil.</h2>
           <p class="mt-1 text-sm">
             {{ formatBytes(result.before) }} → {{ formatBytes(result.size) }} — file aslinya
             udah kecil banget kayaknya. Coba level <strong>Kecil banget</strong>, atau skip aja
@@ -231,7 +231,7 @@ function download() {
           @click="download"
           class="mt-4 cursor-pointer rounded-xl border-2 border-ink bg-white px-6 py-3 font-extrabold transition-transform hover:-translate-y-0.5 dark:border-paper dark:bg-ink dark:text-paper"
         >
-          ⬇️ Download
+          <MIcon name="download" /> Download
         </button>
       </div>
     </div>

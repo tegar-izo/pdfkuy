@@ -19,7 +19,7 @@ async function addFiles(incoming) {
   for (const file of incoming) {
     const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
     if (!isPdf) {
-      errors.value.push(`${file.name} bukan PDF 😅`)
+      errors.value.push(`${file.name} bukan PDF`)
       continue
     }
     const dup = files.value.some(
@@ -42,7 +42,7 @@ async function addFiles(incoming) {
       })
     } catch {
       errors.value.push(
-        `${file.name} gagal dibaca — kemungkinan rusak atau kena password 🔒`,
+        `${file.name} gagal dibaca — kemungkinan rusak atau kena password`,
       )
     }
   }
@@ -107,10 +107,10 @@ function resetSemua() {
 
 <template>
   <section class="py-6">
-    <h1 class="text-3xl font-extrabold tracking-tight">🧩 Gabung PDF</h1>
+    <h1 class="text-3xl font-extrabold tracking-tight"><MIcon name="layers" /> Gabung PDF</h1>
     <p class="mt-2 opacity-80">
       Taro beberapa PDF, urutin sesuai keinginan, terus gabung jadi satu file. Semuanya lokal di
-      browser kamu. 🔒
+      browser kamu.
     </p>
 
     <div class="mt-6">
@@ -125,7 +125,7 @@ function resetSemua() {
         :key="i"
         class="rounded-lg border-2 border-red-400 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 dark:bg-red-950 dark:text-red-300"
       >
-        ⚠️ {{ msg }}
+        <MIcon name="warning" /> {{ msg }}
       </li>
     </ul>
 
@@ -167,7 +167,7 @@ function resetSemua() {
               aria-label="Naikkan urutan"
               class="cursor-pointer rounded-lg border-2 border-ink px-2 py-1 font-bold disabled:cursor-not-allowed disabled:opacity-30 dark:border-paper"
             >
-              ↑
+              <MIcon name="arrow_upward" />
             </button>
             <button
               type="button"
@@ -176,7 +176,7 @@ function resetSemua() {
               aria-label="Turunkan urutan"
               class="cursor-pointer rounded-lg border-2 border-ink px-2 py-1 font-bold disabled:cursor-not-allowed disabled:opacity-30 dark:border-paper"
             >
-              ↓
+              <MIcon name="arrow_downward" />
             </button>
             <button
               type="button"
@@ -184,7 +184,7 @@ function resetSemua() {
               aria-label="Hapus file"
               class="cursor-pointer rounded-lg border-2 border-ink px-2 py-1 font-bold hover:bg-red-500 hover:text-white dark:border-paper"
             >
-              ✕
+              <MIcon name="close" />
             </button>
           </div>
         </li>
@@ -196,7 +196,7 @@ function resetSemua() {
         :disabled="!canMerge"
         class="mt-6 w-full cursor-pointer rounded-xl border-2 border-ink bg-accent px-6 py-3 text-lg font-extrabold text-ink transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 dark:border-paper sm:w-auto"
       >
-        {{ busy ? 'Lagi nyatuin PDF-nya... 🧩' : 'Gabungkan! 🔥' }}
+        {{ busy ? 'Lagi nyatuin PDF-nya...' : 'Gabungkan!' }}
       </button>
       <p v-if="files.length === 1" class="mt-2 text-sm opacity-70">
         Tambah minimal 1 file lagi ya.
@@ -207,7 +207,7 @@ function resetSemua() {
       v-if="result"
       class="mt-6 rounded-2xl border-2 border-ink bg-accent p-5 text-ink dark:border-paper"
     >
-      <h2 class="text-lg font-extrabold">✅ Beres! File gabungan udah jadi.</h2>
+      <h2 class="text-lg font-extrabold"><MIcon name="check_circle" /> Beres! File gabungan udah jadi.</h2>
       <p class="mt-1 text-sm">
         {{ result.name }} · {{ result.pages }} halaman · {{ formatBytes(result.size) }}
         <span v-if="totalSize">
@@ -219,7 +219,7 @@ function resetSemua() {
         @click="download"
         class="mt-4 cursor-pointer rounded-xl border-2 border-ink bg-white px-6 py-3 font-extrabold transition-transform hover:-translate-y-0.5 dark:border-paper dark:bg-ink dark:text-paper"
       >
-        ⬇️ Download
+        <MIcon name="download" /> Download
       </button>
     </div>
   </section>

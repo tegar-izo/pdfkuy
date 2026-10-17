@@ -9,8 +9,8 @@
   --color-brand: #7c3aed;
   --color-brand-light: #a78bfa;
   --color-accent: #d9f95f;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Google Sans Flex", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 @utility shadow-chunky {
@@ -19,6 +19,42 @@
 
 @utility shadow-chunky-sm {
   box-shadow: 3px 3px 0 0 var(--color-ink);
+}
+
+/* Material Symbols Rounded — selalu FILL, ukuran ngikutin font-size di sekitarnya */
+.material-symbols-rounded {
+  font-family: "Material Symbols Rounded";
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* bungkus ikon (font maupun SVG) — lebar 1em, sejajar baseline teks */
+.m-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+}
+
+.m-icon > .material-symbols-rounded {
+  font-size: 1em;
+}
+
+.m-icon > svg {
+  width: 100%;
+  height: 100%;
 }
 
 html {

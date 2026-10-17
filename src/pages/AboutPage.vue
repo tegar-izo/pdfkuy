@@ -6,7 +6,7 @@ const belum = tools.filter((t) => !t.ready)
 
 <template>
   <section class="py-6">
-    <h1 class="text-3xl font-extrabold tracking-tight">Tentang pdfkuy 📄</h1>
+    <h1 class="text-3xl font-extrabold tracking-tight">Tentang pdfkuy</h1>
 
     <div class="mt-6 space-y-6 text-[17px] leading-relaxed">
       <p>
@@ -17,13 +17,13 @@ const belum = tools.filter((t) => !t.ready)
       </p>
 
       <div class="rounded-2xl border-2 border-ink bg-accent p-5 text-ink dark:border-paper">
-        <h2 class="text-lg font-extrabold">🔒 Soal privasi — serius nih</h2>
+        <h2 class="text-lg font-extrabold"><MIcon name="lock" /> Soal privasi — serius nih</h2>
         <p class="mt-2 text-sm">
           Nggak ada backend. Nggak ada file yang di-upload ke server mana pun. Semua proses —
           baca, gabung, potong, kompres — terjadi di RAM laptop/kamu sendiri. Tutup tab, semua
           jejak hilang. Nggak ada akun, nggak ada email, nggak ada analytics yang nyimpen
           dokumenmu. Buktiin gampang: buka DevTools → tab Network, upload file, lihat sendiri
-          nggak ada request keluar. 😄
+          nggak ada request keluar.
         </p>
       </div>
 
@@ -31,7 +31,7 @@ const belum = tools.filter((t) => !t.ready)
         <h2 class="text-xl font-extrabold">Dibikin pakai apa?</h2>
         <ul class="mt-2 list-inside list-disc space-y-1">
           <li><strong>Vue 3 + Vite + JavaScript</strong> — UI-nya</li>
-          <li><strong>Tailwind CSS</strong> — tampilan playful + dark mode 🌙</li>
+          <li><strong>Tailwind CSS</strong> — tampilan playful + dark mode</li>
           <li><strong>pdf-lib</strong> — manipulasi PDF (merge, split, watermark...)</li>
           <li><strong>pdf.js</strong> — render thumbnail & kompres</li>
           <li><strong>Vue Router</strong> (hash mode) + <strong>GitHub Pages</strong> — hosting
@@ -43,7 +43,7 @@ const belum = tools.filter((t) => !t.ready)
         <h2 class="text-xl font-extrabold">Kenapa namanya "pdfkuy"?</h2>
         <p class="mt-2">
           Karena emang diniatnya gitu: <em>PDF-in, beresin tugas, gas.</em> Ringkas, nggak
-          banyak basa-basi. 🤙
+          banyak basa-basi.
         </p>
       </div>
 

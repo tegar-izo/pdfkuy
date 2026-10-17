@@ -9,7 +9,17 @@ import DarkModeToggle from './components/DarkModeToggle.vue'
         <RouterLink to="/" class="flex items-center gap-2 text-xl font-extrabold tracking-tight">
           <span class="rounded-lg bg-brand px-2 py-0.5 text-white">pdf</span>
           <span>kuy</span>
-          <span aria-hidden="true">📄</span>
+          <svg
+            class="h-5 w-5 text-brand dark:text-brand-light"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            fill-rule="evenodd"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 2h7.4L19 7.6V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm1.6 7.2a1 1 0 0 0 0 2h6.8a1 1 0 0 0 0-2H7.6Zm0 3.6a1 1 0 0 0 0 2h4.8a1 1 0 0 0 0-2H7.6Z"
+            />
+          </svg>
         </RouterLink>
         <nav class="flex items-center gap-4">
           <RouterLink
@@ -36,10 +46,10 @@ import DarkModeToggle from './components/DarkModeToggle.vue'
     <footer class="border-t-2 border-ink dark:border-paper">
       <div class="mx-auto flex max-w-5xl flex-col gap-1 px-4 py-4 text-sm sm:flex-row sm:items-center sm:justify-between">
         <p>
-          🔒 <strong>File kamu nggak pernah keluar dari browser.</strong> Semua proses jalan di
+          <MIcon name="lock" /> <strong>File kamu nggak pernah keluar dari browser.</strong> Semua proses jalan di
           perangkatmu.
         </p>
-        <p class="opacity-70">dibikin santuy buat anak teknik 🤙</p>
+        <p class="opacity-70">dibikin santuy buat anak teknik</p>
       </div>
     </footer>
   </div>
