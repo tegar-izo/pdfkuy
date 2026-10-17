@@ -16,7 +16,7 @@ Kumpul tugas itu urusan PDF terus: gabung ini, split itu, kompres biar muat limi
 | 3 | ✂️ Split PDF (ekstrak/hapus halaman) | ✅ |
 | 4 | 🔄 Susun Halaman (rotate + drag & drop) | ✅ |
 | 5 | 🖼️ Gambar ke PDF | ✅ |
-| 6 | 🔢 Nomor Halaman otomatis | ⏳ |
+| 6 | 🔢 Nomor Halaman otomatis | ✅ |
 | 7 | 💧 Watermark nama/NIM | ⏳ |
 | 8 | 🗜️ Kompres PDF | ⏳ |
 

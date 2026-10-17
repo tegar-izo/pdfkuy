@@ -5,6 +5,7 @@ import MergePage from '../pages/MergePage.vue'
 import SplitPage from '../pages/SplitPage.vue'
 import ArrangePage from '../pages/ArrangePage.vue'
 import ImageToPdfPage from '../pages/ImageToPdfPage.vue'
+import PageNumberPage from '../pages/PageNumberPage.vue'
 
 // Daftar tool v1 — dipakai router sekaligus kartu di landing page.
 // tiap entry: path, nama unik, judul, tagline, emoji, milestone.
@@ -56,6 +57,8 @@ export const tools = [
     tagline: 'Kasih nomor halaman otomatis, biar nggak dimarahin dosen.',
     emoji: '🔢',
     milestone: 6,
+    ready: true,
+    component: PageNumberPage,
   },
   {
     path: '/watermark',

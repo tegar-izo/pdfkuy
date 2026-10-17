@@ -1,4 +1,4 @@
-import { PDFDocument, degrees } from 'pdf-lib'
+import { PDFDocument, StandardFonts, degrees, rgb } from 'pdf-lib'
 
 /** 1024 → "1 KB" */
 export function formatBytes(bytes) {
@@ -138,6 +138,96 @@ export async function imagesToPdf(items, { pageMode = 'a4', margin = 24 } = {}) 
       height: h,
     })
   }
+  return doc.save()
+}
+
+/**
+ * Tempel nomor halaman ke tiap halaman.
+ * Posisi dihitung di ruang tampilan (view) lalu dipetakan ke ruang koordinat PDF asli,
+ * sehingga tetap bener walau halaman punya /Rotate.
+ * @param {ArrayBuffer|Uint8Array} buffer
+ * @param {object} [opts]
+ * @param {'top-left'|'top-center'|'top-right'|'bottom-left'|'bottom-center'|'bottom-right'} [opts.position]
+ * @param {'n'|'slash'|'label'} [opts.format] — '1' | '1 / 12' | 'Halaman 1'
+ * @param {number} [opts.size] — pt
+ * @param {boolean} [opts.bold]
+ * @param {'black'|'white'} [opts.color]
+ * @param {number} [opts.start] — angka awal halaman pertama
+ * @param {boolean} [opts.skipFirst]
+ * @param {number} [opts.margin] — jarak tepi dalam pt (arah tampilan)
+ */
+export async function stampPageNumbers(buffer, opts = {}) {
+  const {
+    position = 'bottom-center',
+    format = 'n',
+    size = 11,
+    bold = false,
+    color = 'black',
+    start = 1,
+    skipFirst = false,
+    margin = 22,
+  } = opts
+
+  const doc = await PDFDocument.load(buffer)
+  const font = await doc.embedFont(bold ? StandardFonts.HelveticaBold : StandardFonts.Helvetica)
+  const ink = color === 'white' ? rgb(1, 1, 1) : rgb(0, 0, 0)
+  const [vertical, horizontal] = position.split('-')
+
+  const pages = doc.getPages()
+  const total = pages.length
+
+  pages.forEach((page, i) => {
+    if (skipFirst && i === 0) return
+
+    const n = start + i
+    const text =
+      format === 'slash' ? `${n} / ${total}` : format === 'label' ? `Halaman ${n}` : `${n}`
+
+    const rot = (((page.getRotation().angle % 360) + 360) % 360)
+    const pw = page.getWidth()
+    const ph = page.getHeight()
+    const swap = rot === 90 || rot === 270
+    const vw = swap ? ph : pw
+    const vh = swap ? pw : ph
+    const tw = font.widthOfTextAtSize(text, size)
+
+    // posisi di ruang tampilan (y dari bawah)
+    const vx =
+      horizontal === 'left' ? margin : horizontal === 'right' ? vw - margin - tw : (vw - tw) / 2
+    const vy = vertical === 'top' ? vh - margin - size : margin
+
+    // pemetaan view → ruang PDF asli, sesuai rotasi halaman
+    let ux
+    let uy
+    let angle
+    if (rot === 90) {
+      ux = pw - vy
+      uy = vx
+      angle = 90
+    } else if (rot === 180) {
+      ux = pw - vx
+      uy = ph - vy
+      angle = 180
+    } else if (rot === 270) {
+      ux = vy
+      uy = ph - vx
+      angle = 270
+    } else {
+      ux = vx
+      uy = vy
+      angle = 0
+    }
+
+    page.drawText(text, {
+      x: ux,
+      y: uy,
+      size,
+      font,
+      color: ink,
+      rotate: degrees(angle),
+    })
+  })
+
   return doc.save()
 }
 
