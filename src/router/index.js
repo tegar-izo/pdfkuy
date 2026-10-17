@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomePage from '../pages/HomePage.vue'
 import ToolPage from '../pages/ToolPage.vue'
+import MergePage from '../pages/MergePage.vue'
 
 // Daftar tool v1 — dipakai router sekaligus kartu di landing page.
 // tiap entry: path, nama unik, judul, tagline, emoji, milestone.
@@ -12,6 +13,8 @@ export const tools = [
     tagline: 'Gabung banyak PDF jadi satu file. Beres.',
     emoji: '🧩',
     milestone: 2,
+    ready: true,
+    component: MergePage,
   },
   {
     path: '/split',
@@ -68,7 +71,7 @@ const routes = [
   ...tools.map((tool) => ({
     path: tool.path,
     name: tool.name,
-    component: ToolPage,
+    component: tool.component ?? ToolPage,
     meta: tool,
   })),
 ]

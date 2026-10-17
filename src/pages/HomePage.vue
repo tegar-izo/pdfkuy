@@ -25,6 +25,13 @@ import { tools } from '../router'
         <div class="flex items-center justify-between">
           <span class="text-4xl">{{ tool.emoji }}</span>
           <span
+            v-if="tool.ready"
+            class="rounded-full border-2 border-ink bg-accent px-2 py-0.5 text-xs font-bold text-ink dark:border-paper"
+          >
+            ✅ Siap pakai
+          </span>
+          <span
+            v-else
             class="rounded-full border-2 border-ink px-2 py-0.5 text-xs font-bold dark:border-paper"
           >
             Milestone {{ tool.milestone }}

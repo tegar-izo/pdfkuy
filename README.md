@@ -12,7 +12,7 @@ Kumpul tugas itu urusan PDF terus: gabung ini, split itu, kompres biar muat limi
 
 | Milestone | Fitur | Status |
 |-----------|-------|--------|
-| 2 | 🧩 Gabung PDF (merge) | ⏳ |
+| 2 | 🧩 Gabung PDF (merge) | ✅ |
 | 3 | ✂️ Split PDF (ekstrak/hapus halaman) | ⏳ |
 | 4 | 🔄 Susun Halaman (rotate + drag & drop) | ⏳ |
 | 5 | 🖼️ Gambar ke PDF | ⏳ |
