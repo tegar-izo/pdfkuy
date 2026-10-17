@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomePage from '../pages/HomePage.vue'
 import ToolPage from '../pages/ToolPage.vue'
 import MergePage from '../pages/MergePage.vue'
+import SplitPage from '../pages/SplitPage.vue'
 
 // Daftar tool v1 — dipakai router sekaligus kartu di landing page.
 // tiap entry: path, nama unik, judul, tagline, emoji, milestone.
@@ -23,6 +24,8 @@ export const tools = [
     tagline: 'Ambil atau buang halaman tertentu sesuka hati.',
     emoji: '✂️',
     milestone: 3,
+    ready: true,
+    component: SplitPage,
   },
   {
     path: '/susun',

@@ -34,6 +34,54 @@ export async function mergePdfs(items) {
   return merged.save()
 }
 
+/**
+ * Ambil halaman tertentu dari PDF jadi file baru.
+ * @param {ArrayBuffer|Uint8Array} buffer — PDF asli
+ * @param {number[]} keepIndices — index halaman (0-based) yang dipertahankan, urutan naik
+ */
+export async function slicePdf(buffer, keepIndices) {
+  const src = await PDFDocument.load(buffer)
+  const out = await PDFDocument.create()
+  const pages = await out.copyPages(src, keepIndices)
+  for (const page of pages) {
+    out.addPage(page)
+  }
+  return out.save()
+}
+
+/**
+ * Parse range halaman gaya manusia: "1-3, 7, 10-12" → index 0-based.
+ * Throw Error dengan pesan ramah kalau format salah / halaman nggak ada.
+ */
+export function parsePageRange(text, pageCount) {
+  const indices = new Set()
+  for (const part of text.split(',')) {
+    const token = part.trim()
+    if (!token) continue
+    const range = token.match(/^(\d+)\s*-\s*(\d+)$/)
+    if (range) {
+      let start = Number(range[1])
+      let end = Number(range[2])
+      if (start > end) [start, end] = [end, start]
+      for (let p = start; p <= end; p++) {
+        if (p < 1 || p > pageCount) {
+          throw new Error(`Halaman ${p} nggak ada — PDF-nya cuma ${pageCount} halaman.`)
+        }
+        indices.add(p - 1)
+      }
+    } else if (/^\d+$/.test(token)) {
+      const p = Number(token)
+      if (p < 1 || p > pageCount) {
+        throw new Error(`Halaman ${p} nggak ada — PDF-nya cuma ${pageCount} halaman.`)
+      }
+      indices.add(p - 1)
+    } else {
+      throw new Error(`Format "${token}" belum kenal. Contoh bener: 1-3, 7, 10-12`)
+    }
+  }
+  return [...indices].sort((a, b) => a - b)
+}
+
 /** Download blob sebagai file di browser. */
 export function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob)
