@@ -4,6 +4,7 @@ import ToolPage from '../pages/ToolPage.vue'
 import MergePage from '../pages/MergePage.vue'
 import SplitPage from '../pages/SplitPage.vue'
 import ArrangePage from '../pages/ArrangePage.vue'
+import ImageToPdfPage from '../pages/ImageToPdfPage.vue'
 
 // Daftar tool v1 — dipakai router sekaligus kartu di landing page.
 // tiap entry: path, nama unik, judul, tagline, emoji, milestone.
@@ -45,6 +46,8 @@ export const tools = [
     tagline: 'Tumpukan foto atau scan tugas jadi PDF rapi.',
     emoji: '🖼️',
     milestone: 5,
+    ready: true,
+    component: ImageToPdfPage,
   },
   {
     path: '/nomor-halaman',

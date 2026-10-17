@@ -105,6 +105,42 @@ export async function arrangePages(buffer, order) {
   return out.save()
 }
 
+const A4 = { width: 595.28, height: 841.89 }
+
+/**
+ * Gabungkan gambar-gambar jadi PDF.
+ * @param {Array<{ data: ArrayBuffer, mime: string }>} items — hasil fileToEmbeddable
+ * @param {object} [opts]
+ * @param {'a4'|'fit'} [opts.pageMode] — 'a4' = tiap gambar di A4 rapi di tengah, 'fit' = halaman pas ukuran gambar
+ * @param {number} [opts.margin] — margin pt kalau mode a4
+ */
+export async function imagesToPdf(items, { pageMode = 'a4', margin = 24 } = {}) {
+  const doc = await PDFDocument.create()
+  for (const item of items) {
+    const img = item.mime === 'image/png' ? await doc.embedPng(item.data) : await doc.embedJpg(item.data)
+    if (pageMode === 'fit') {
+      const page = doc.addPage([img.width, img.height])
+      page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height })
+      continue
+    }
+    const page = doc.addPage([A4.width, A4.height])
+    const scale = Math.min(
+      (A4.width - margin * 2) / img.width,
+      (A4.height - margin * 2) / img.height,
+      1, // gambar kecil nggak dipaksa membesar — biar nggak buram
+    )
+    const w = img.width * scale
+    const h = img.height * scale
+    page.drawImage(img, {
+      x: (A4.width - w) / 2,
+      y: (A4.height - h) / 2,
+      width: w,
+      height: h,
+    })
+  }
+  return doc.save()
+}
+
 /** Download blob sebagai file di browser. */
 export function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob)
