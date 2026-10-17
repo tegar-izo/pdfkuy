@@ -4,6 +4,8 @@ Urusan PDF? Gas. Toolkit PDF yang jalan **100% di browser** — file kamu nggak 
 
 Dibikin santuy buat (terutama) mahasiswa teknik komputer yang lagi nyusun tugas. 🫡
 
+> 🌐 **Live:** [tegar-izo.github.io/pdfkuy](https://tegar-izo.github.io/pdfkuy)
+
 ## Kenapa ada ini?
 
 Kumpul tugas itu urusan PDF terus: gabung ini, split itu, kompres biar muat limit upload, kasih nomor halaman biar nggak dimarahin dosen... Tools sebelah minta login + upload file tugasmu ke server mereka. **Kok tega?** Di sini semuanya prosesnya di perangkat kamu sendiri.
@@ -24,10 +26,27 @@ Rencana v2: PDF → gambar, gabung banyak gambar jadi satu PDF, dan lain-lain (s
 
 ## Tech stack
 
-- **Vue 3 + Vite + JavaScript** — UI
+- **Vue 3 + Vite + JavaScript** — UI, dengan route-level code splitting (bundle awal ringan)
 - **Tailwind CSS v4** — desain playful & bold, ada dark mode 🌙
-- **pdf-lib / pdf.js** — mesin PDF-nya (nanti di milestone berikutnya)
+- **pdf-lib** — manipulasi PDF (merge, split, susun, nomor, watermark)
+- **pdfjs-dist** — thumbnail preview & kompres (web worker, nggak nge-freeze UI)
+- **vue-draggable-plus** — drag & drop halaman
 - **GitHub Actions → GitHub Pages** — deploy otomatis pas push ke `main`
+
+Struktur kode:
+
+```text
+src/
+├── lib/          # logika murni, teruji terpisah dari UI
+│   ├── pdf.js          # merge, slice, arrange, nomor, watermark, images→pdf
+│   ├── compress.js     # kompres via render ulang JPEG
+│   ├── images.js       # normalisasi gambar (webp/gif → jpg)
+│   ├── thumbnails.js   # render thumbnail pdf.js
+│   └── pdfjs-setup.js  # konfigurasi web worker
+├── pages/        # satu halaman per tool
+├── components/   # UploadZone (drag&drop), DarkModeToggle
+└── router/       # daftar tools = sumber kebenaran (route + kartu landing)
+```
 
 ## Jalanin lokal
 
@@ -40,7 +59,13 @@ Build buat production:
 
 ```sh
 npm run build
+npm run preview   # cek hasil build lokal
 ```
+
+## Deploy
+
+Auto: push ke `main` → GitHub Actions build → GitHub Pages. One-time setup di repo:
+**Settings → Pages → Source: GitHub Actions**.
 
 ## Privacy
 

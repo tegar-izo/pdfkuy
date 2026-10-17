@@ -18,6 +18,12 @@ import DarkModeToggle from './components/DarkModeToggle.vue'
           >
             Home
           </RouterLink>
+          <RouterLink
+            to="/about"
+            class="text-sm font-bold hover:text-brand dark:hover:text-brand-light"
+          >
+            About
+          </RouterLink>
           <DarkModeToggle />
         </nav>
       </div>

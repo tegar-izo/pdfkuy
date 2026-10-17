@@ -1,16 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomePage from '../pages/HomePage.vue'
 import ToolPage from '../pages/ToolPage.vue'
-import MergePage from '../pages/MergePage.vue'
-import SplitPage from '../pages/SplitPage.vue'
-import ArrangePage from '../pages/ArrangePage.vue'
-import ImageToPdfPage from '../pages/ImageToPdfPage.vue'
-import PageNumberPage from '../pages/PageNumberPage.vue'
-import WatermarkPage from '../pages/WatermarkPage.vue'
-import CompressPage from '../pages/CompressPage.vue'
 
 // Daftar tool v1 — dipakai router sekaligus kartu di landing page.
-// tiap entry: path, nama unik, judul, tagline, emoji, milestone.
+// `component` berupa lazy loader supaya tiap tool jadi chunk terpisah:
+// bundle awal tetap ringan, pdf-lib/pdfjs-dist cuma dimuat saat tool-nya dibuka.
 export const tools = [
   {
     path: '/merge',
@@ -20,7 +14,7 @@ export const tools = [
     emoji: '🧩',
     milestone: 2,
     ready: true,
-    component: MergePage,
+    component: () => import('../pages/MergePage.vue'),
   },
   {
     path: '/split',
@@ -30,7 +24,7 @@ export const tools = [
     emoji: '✂️',
     milestone: 3,
     ready: true,
-    component: SplitPage,
+    component: () => import('../pages/SplitPage.vue'),
   },
   {
     path: '/susun',
@@ -40,7 +34,7 @@ export const tools = [
     emoji: '🔄',
     milestone: 4,
     ready: true,
-    component: ArrangePage,
+    component: () => import('../pages/ArrangePage.vue'),
   },
   {
     path: '/gambar-ke-pdf',
@@ -50,7 +44,7 @@ export const tools = [
     emoji: '🖼️',
     milestone: 5,
     ready: true,
-    component: ImageToPdfPage,
+    component: () => import('../pages/ImageToPdfPage.vue'),
   },
   {
     path: '/nomor-halaman',
@@ -60,7 +54,7 @@ export const tools = [
     emoji: '🔢',
     milestone: 6,
     ready: true,
-    component: PageNumberPage,
+    component: () => import('../pages/PageNumberPage.vue'),
   },
   {
     path: '/watermark',
@@ -70,7 +64,7 @@ export const tools = [
     emoji: '💧',
     milestone: 7,
     ready: true,
-    component: WatermarkPage,
+    component: () => import('../pages/WatermarkPage.vue'),
   },
   {
     path: '/kompres',
@@ -80,12 +74,13 @@ export const tools = [
     emoji: '🗜️',
     milestone: 8,
     ready: true,
-    component: CompressPage,
+    component: () => import('../pages/CompressPage.vue'),
   },
 ]
 
 const routes = [
   { path: '/', name: 'home', component: HomePage },
+  { path: '/about', name: 'about', component: () => import('../pages/AboutPage.vue') },
   ...tools.map((tool) => ({
     path: tool.path,
     name: tool.name,
